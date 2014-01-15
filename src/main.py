@@ -10,6 +10,7 @@ def main():
 
   # DPMM setting
   alpha = 0.5
+  niter = 10
 
 
   # Generate data
@@ -19,10 +20,11 @@ def main():
   CRP.alpha = alpha
   CRP.init_partition()
   
-  Data.print_data()
-
-  # Test
-
+  # Iterations
+  for _it in range(niter):
+    print "[ iteration %d ] ================" % (_it)
+    
+ 
 
 
 if __name__ == '__main__':

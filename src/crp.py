@@ -28,3 +28,7 @@ class CRP():
       _cid = prob_based_rand(probs)
       Data.mark(_id, _cid)
 
+  @staticmethod
+  def gibbs_sampling():
+    
+

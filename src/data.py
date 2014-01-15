@@ -1,12 +1,16 @@
 import numpy as np
+import pprint
 
 GEN_DATA_SCALE = 1.0
-
 
 class Data():
   xdata = {}
   ydata = {}
-  mdid = 0
+  mdid = 1
+  mcid = 1
+  belogs = {}  # data id -> class id
+  contains = {}  # class id -> data id list
+
 
   def __init__(self):
     pass
@@ -48,6 +52,8 @@ class Data():
       did : data id
       return : x data of that id
     """
+    if did not in Data.xdata.keys():
+      return None
     return Data.xdata[did]
 
   
@@ -57,14 +63,81 @@ class Data():
       did : data id
       return : y data of that id
     """
-    return Dataydata[did]
+    if did not in Data.ydata.keys():
+      return None
+    return Data.ydata[did]
 
   @staticmethod
-  def get_all_id():
+  def get_all_data_id():
     """
       return : all data id
     """
     return Data.xdata.keys()
+
+
+  @staticmethod
+  def get_all_class_id():
+    """
+      return : class id list
+    """
+    return list(set(Data.belogs.values()))
+
+  
+  @staticmethod
+  def get_data_class(did):
+    """
+      did : data id
+      return : class id
+    """
+    if did not in Data.belogs.keys():
+      return None
+    return Data.belogs[did]
+
+
+  @staticmethod
+  def get_class_data(cid):
+    """
+      cid : class id
+      return : data id list []
+    """
+    if cid not in Data.contains.keys():
+      return None
+    return Data.contains[cid]
+
+
+  @staticmethod
+  def new_class():
+    """
+      return : new class id
+    """
+    _cid = Data.mcid
+    Data.mcid += 1
+    Data.contains[_cid] = []
+    return _cid
+
+
+  @staticmethod
+  def mark(did, cid):
+    """
+      did : data id
+      return : None. add data id to class
+    """
+    Data.belogs[did] = cid
+    Data.contains[cid].append(did)
+
+
+  @staticmethod
+  def print_data():
+    print(" [ xdata ] ")
+    pprint.pprint(Data.xdata)
+    print(" [ ydata ] ")
+    pprint.pprint(Data.ydata)
+    print(" [ belongs ] " )
+    pprint.pprint(Data.belogs)
+    print(" [ contains ] ")
+    pprint.pprint(Data.contains)
+    
+    
 
 def main():
   data_size = 10

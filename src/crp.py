@@ -86,13 +86,12 @@ class CRP():
     all_data_id = Data.get_all_data_id()
     perm = np.random.permutation(all_data_id)
     
+    # Sample Z
     for _did in perm:
       CRP.probs.clear()
-      # Remove data from Data
       _cid = Data.get_data_class(_did)
       Data.unlink_data(_did)
     
-      # Cal condition probs
       all_class_id = Data.get_all_class_id()
       _data_mat = CRP._data_to_mat(_did)
       _data_size = len(Data.get_all_data_id())
@@ -112,7 +111,7 @@ class CRP():
         del CRP.probs[_new_cid]
         Data.delete_class(_new_cid)
 
-    # Smaple for each class
+    # Smaple Φ
     all_class_id = Data.get_all_class_id()
     CRP.classpara.clear()
     for _cid in all_class_id : 

@@ -7,7 +7,6 @@ def main():
   # Data generation settting
   data_size = 100
   class_size = 3
-  #gauss_mean = [ (2,2), (0,0), (4,4) ]
   gauss_mean = [ (2.0, 2.0), (-2.0, 1.5), (-0.1, -2.5)]
 
   # DPMM setting

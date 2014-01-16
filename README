@@ -1,0 +1,43 @@
+DPM implementation 
+============================
+
+0. File and Directorys
+  src/ 源代码
+    src/main.py 程序入口
+    src/data.py 数据相关：产生数据，获取数据内容...
+    src/crp.py CRP, gibbs_sampling, sample z Φ
+    src/mathutils.py 数学公式，随机函数
+    src/evalue.py Evalutation需要记录的数据， 结果显示
+
+  result/ 数据和结果
+    result/data.png 产生的数据
+    result/evaluation.png 结果
+
+1. How to Generate Data
+  提前人工制定gauss分布的均值为,
+  gauss_mean = [ (2.0, 2.0), (-2.0, 1.5), (-0.1, -2.5)]
+  然后numpy.random.normal 生成，生成的数据符合给定的gauss_mean的高斯分布。
+  具体的生成数据的函数在 data.py 中的gen_data()函数
+
+2. Main functions
+  2.1 生成数据
+    Data.gen_data(data_size, class_size, gauss_mean), 
+      class_size表示数据的类数，每一类的数据都满足给定的gauss_mean的高斯分布
+      data_size表示每类数据的个数
+
+  2.2 初始化CRP，将数据预分类，随机分类，分到每个类的概率均等，初始类的个数就是数据的个数
+    CRP.init_partition()
+
+  2.3 迭代 gibbs_sampling ，指定迭代次数为niter
+    for _it in range(niter):
+      CRP.gibbs_sampling()  # 对数据依次进行gibbs_sampling, CRP inference
+      Evalue.dovalue()      # 记录evalutation需要的结果
+
+3. Run 
+  python main.py
+
+4. Evaluation 
+  D(K;a), M-dis1 , M-dis2 的结果在 ./result/evaluation.png
+  产生的数据在 ./result/data.png
+
+

@@ -3,9 +3,11 @@ from crp import CRP
 from numpy import sum
 from numpy import sqrt
 from numpy import log
+import matplotlib.pyplot as plt
 
 class Evalue():
   
+  clss_size = {}
   diff_c = {}
   M_dis1 = {}
   M_dis2 = {}
@@ -19,6 +21,7 @@ class Evalue():
     it = Evalue.iteration
     Evalue.iteration += 1
       
+    Evalue.clss_size[it] = len(Data.get_all_class_id())
     # Diff class number
     class_size = len(Data.get_all_class_id()) 
     data_size = len(Data.get_all_data_id())
@@ -60,3 +63,71 @@ class Evalue():
       s += sqrt(_dx*_dx + _dy*_dy) 
       
     Evalue.M_dis2[it] = s
+
+
+  @staticmethod
+  def show_evaluation():
+    # Plot Data
+    plt.figure(1)
+
+    x_values = []
+    y_values = []
+    for _did in Data.get_all_data_id():
+      x_values.append(Data.getxdata(_did))
+      y_values.append(Data.getydata(_did))
+    
+    plt.plot(x_values, y_values, 'ro')
+    plt.title(' Data ')
+
+    # Plot Evaluation
+    plt.figure(2)
+
+    # Plot Diff_c
+    x_values = Evalue.diff_c.keys()
+    y_values = []
+    for _it in x_values:
+      y_values.append(Evalue.diff_c[_it])
+    
+    plt.subplot(411)
+    plt.plot(x_values, y_values, 'k')
+    plt.ylabel(' D(K;a)')
+    plt.xlabel(' Iteration ')
+
+    # Plot M_dis1
+    y_values = []
+    for _it in x_values : 
+      y_values.append(Evalue.M_dis1[_it])
+
+    plt.subplot(412)
+    plt.plot(x_values, y_values, 'k')
+    plt.ylabel(' M-dis1')
+    plt.xlabel(' Iteration ')
+
+    # Plot M_dis2
+    y_values = []
+    for _it in x_values : 
+      y_values.append(Evalue.M_dis2[_it])
+
+    plt.subplot(413)
+    plt.plot(x_values, y_values, 'k')
+    plt.ylabel(' M-dis2')
+    plt.xlabel(' Iteration ')
+
+    # Plot Class number
+    y_values = []
+    for _it in x_values : 
+      y_values.append(Evalue.clss_size[_it])
+
+    plt.subplot(414)
+    plt.plot(x_values, y_values, 'k')
+    plt.ylabel(' Class number')
+    plt.xlabel(' Iteration ')
+    
+    plt.show()
+
+
+
+
+
+
+

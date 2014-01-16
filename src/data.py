@@ -127,6 +127,26 @@ class Data():
 
 
   @staticmethod
+  def unlink_data(did):
+    #del Data.xdata[did]
+    #del Data.ydata[did]
+    cid = Data.belogs[did]
+    del Data.belogs[did]
+    Data.contains[cid].remove(did)
+
+  
+  @staticmethod
+  def get_data_id_after(did):
+    ret = []
+    all_ids = Data.xdata.keys():
+    for _id in all_ids:
+      if _id >= did :
+        ret.append(_id)
+
+    return ret
+
+
+  @staticmethod
   def print_data():
     print(" [ xdata ] ")
     pprint.pprint(Data.xdata)

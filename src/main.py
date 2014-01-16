@@ -1,5 +1,6 @@
 from data import Data
 from crp  import CRP
+from evalue import Evalue
 
 def main():
   
@@ -23,9 +24,14 @@ def main():
   # Iterations
   for _it in range(niter):
     print "[ iteration %d ] ================" % (_it)
+    CRP.gibbs_sampling()
+    Evalue.dovalue()
     
- 
-
+    print "[ evalueation %d ] ==============" % (_it)
+    print "    cluster number : %d " % (len(Data.get_all_class_id()))
+    print "    diff_class     : %f"  % (Evalue.diff_c[_it])
+    print "    M_dis1         : %f"  % (Evalue.M_dis1[_it])
+    print "    M_dis2         : %f"  % (Evalue.M_dis2[_it])
 
 if __name__ == '__main__':
   main()

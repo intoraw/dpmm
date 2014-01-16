@@ -36,8 +36,9 @@ def prob_based_rand_dict(probs_dict):
     probs : prob dict, sum equals to 1.0
     return : sample idx.
   """
-  s = sum(probs_dict.values())
-  probs = map(lambda x : x[1] / s , probs_dict.items())
+  s = sum(probs_dict.values()) 
+  for _i in probs_dict.keys():
+    probs_dict[_i] = probs_dict[_i] / s
 
   _t = 0.0
   for _key in probs_dict.keys():
@@ -59,10 +60,11 @@ def gauss_comp(X, mu, sigma, mode):
     return : a prob value
   """
   if mode == 'NEW' :
-    prob = 1.0 / (2*pi)*(det(inv(2.0*eye(2)))^(1/2.0) * exp(-1/2.0*dot(transpose(X), dot(1/2.0*eye(2), X)))
-  else if mode == 'OLD' : 
+    prob = 1.0 / (2*pi)*det(inv(2.0*eye(2)))**(1/2.0) * exp(-1/2.0*dot(transpose(X), dot(1/2.0*eye(2), X)))
+    return prob[0][0]
+  elif mode == 'OLD': 
     prob = 1.0 / (2*pi)*exp(-1/2.0*dot((X-mu), transpose(X-mu)))
+    return prob[0][0]
   else :
     print " [ ERROR ] Unknown Mode : %s" % (mode)
-
 

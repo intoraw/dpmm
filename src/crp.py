@@ -1,5 +1,6 @@
 from data import Data
 from mathutils import prob_based_rand
+from mathutils import prob_based_rand_dict
 from mathutils import gauss_comp
 import numpy as np
 from numpy import transpose 
@@ -30,7 +31,7 @@ class CRP():
     _probs = [ 1.0 / data_size for _ in range(data_size) ]
 
     for _id in Data.get_all_data_id() :
-      _cid = prob_based_rand(_probs)
+      _cid = prob_based_rand(_probs) + 1
       Data.mark(_id, _cid)
 
   
@@ -61,11 +62,13 @@ class CRP():
     return ret
 
   @staticmethod
-  def _cpara_to_mat(cid, mode):
+  def _cpara_to_mat(cid):
     """
       cid : class id
       return : matrix 
     """
+    if cid not in CRP.classpara.keys():
+      CRP.classpara[cid] = (0.0, 0.0)
     x_para, y_para = CRP.classpara[cid]
     ret = np.zeros([1, 2], dtype=float)
     ret[0][0] = x_para
@@ -81,8 +84,8 @@ class CRP():
     all_data_id = Data.get_all_data_id()
     perm = np.random.permutation(all_data_id)
     
-    # Remove data from Data
     for _did in perm:
+      # Remove data from Data
       _cid = Data.get_data_class(_did)
       Data.unlink_data(_did)
     
@@ -90,7 +93,7 @@ class CRP():
       all_class_id = Data.get_all_class_id()
       _data_mat = CRP._data_to_mat(_did)
       for __cid in all_class_id :
-        __cpara_mat = CPR._cpara_to_mat(__cid)
+        __cpara_mat = CRP._cpara_to_mat(__cid)
         CRP.probs[__cid] = gauss_comp(transpose(_data_mat), transpose(__cpara_mat), 0, 'OLD')
     
       _data_size = len(Data.get_all_data_id())

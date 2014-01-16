@@ -117,6 +117,11 @@ class Data():
 
 
   @staticmethod
+  def delete_class(cid):
+    del Data.contains[cid]
+
+
+  @staticmethod
   def mark(did, cid):
     """
       did : data id

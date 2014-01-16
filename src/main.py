@@ -7,11 +7,12 @@ def main():
   # Data generation settting
   data_size = 100
   class_size = 3
-  gauss_mean = [ (2,2), (0,0), (4,4) ]
+  #gauss_mean = [ (2,2), (0,0), (4,4) ]
+  gauss_mean = [ (2.4, 2), (-1.8, 1.4), (-0.2, -2.6)]
 
   # DPMM setting
   alpha = 0.5
-  niter = 10
+  niter = 500
 
 
   # Generate data

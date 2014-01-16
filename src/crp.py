@@ -79,12 +79,15 @@ class CRP():
 
   @staticmethod
   def gibbs_sampling():
-    CRP.probs.clear()
+    """
+      do gibbs sampling
+    """
 
     all_data_id = Data.get_all_data_id()
     perm = np.random.permutation(all_data_id)
     
     for _did in perm:
+      CRP.probs.clear()
       # Remove data from Data
       _cid = Data.get_data_class(_did)
       Data.unlink_data(_did)
@@ -92,14 +95,12 @@ class CRP():
       # Cal condition probs
       all_class_id = Data.get_all_class_id()
       _data_mat = CRP._data_to_mat(_did)
+      _data_size = len(Data.get_all_data_id())
       for __cid in all_class_id :
         __cpara_mat = CRP._cpara_to_mat(__cid)
         CRP.probs[__cid] = gauss_comp(transpose(_data_mat), transpose(__cpara_mat), 0, 'OLD')
-    
-      _data_size = len(Data.get_all_data_id())
-      for __cid in all_class_id : 
-        CRP.probs[__cid] = len(Data.get_class_data(__cid)) * CRP.probs[__cid] / (_data_size + CRP.alpha -1 )
-  
+        CRP.probs[__cid] = len(Data.get_class_data(__cid)) * CRP.probs[__cid] / (_data_size + CRP.alpha - 1)
+ 
       _new_cid = Data.new_class()
       CRP.probs[_new_cid] = CRP.alpha * gauss_comp(transpose(_data_mat), 0, 0, 'NEW') / ( _data_size + CRP.alpha - 1)
 
@@ -107,8 +108,13 @@ class CRP():
       _pre_cid = prob_based_rand_dict(CRP.probs)
       Data.mark(_did, _pre_cid)
 
+      if _pre_cid != _new_cid :
+        del CRP.probs[_new_cid]
+        Data.delete_class(_new_cid)
+
     # Smaple for each class
     all_class_id = Data.get_all_class_id()
+    CRP.classpara.clear()
     for _cid in all_class_id : 
       _class_data_id = Data.get_class_data(_cid)
       sigma = 1.0 / (1 + len(_class_data_id))
@@ -116,8 +122,6 @@ class CRP():
       y_values = [ Data.getydata(__did) for __did in _class_data_id]
       mu_x , mu_y = sigma * np.sum(x_values) , sigma * np.sum(y_values)
       CRP.classpara[_cid] = ( np.random.normal(mu_x, sigma), np.random.normal(mu_y, sigma))
-
-
 
 
 
